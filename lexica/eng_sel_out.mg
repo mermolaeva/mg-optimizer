@@ -1,0 +1,56 @@
+/2021-05-12 18:58:19 eng_sel_out/
+
+/Start category/
+t;
+
+:: =>0 da -k;
+Mary :: 0;
+John :: 0;
+'s :: =>0 poss;
+the-cause :: d -k;
+for :: =d *k for;
+of :: =d *k of;
+about :: =d *k about;
+s :: =>1 +k t;
+:: =>2 =da 3;
+be :: =a 2;
+d :: =>1 +k t;
+n :: =>4 perf;
+:: =>3 4;
+ing :: =>3 prog;
+will :: =v 1;
+have :: =perf v;
+:: =>v 1;
+be :: =prog 4;
+:: =>4 v;
+:: =>5 2;
+hope :: =for 5;
+:: =>6 poss= d -k;
+:: =>5 6;
+ful :: =>7 a;
+:: =>5 7;
+:: =>8 2;
+:: =>9 =of 8;
+boast :: 9;
+:: =>8 6;
+:: =>10 =of 7;
+:: =>9 10;
+:: =>9 =about 2;
+:: =>9 =about 6;
+:: =>9 =about 7;
+:: =>11 =d *k 2;
+fear :: 12;
+:: =>12 =of 6;
+:: =>12 11;
+neglect :: 12;
+:: =>12 10;
+scorn :: 12;
+respect :: 13;
+:: =>13 =for 6;
+:: =>13 11;
+disdain :: 13;
+:: =>13 10;
+doubt :: 14;
+:: =>14 12;
+:: =>14 =about 6;
+:: =>14 =about 7;

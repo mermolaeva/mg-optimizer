@@ -1,0 +1,50 @@
+/2021-05-12 18:43:39 eng_long_out/
+
+/Start category/
+t;
+
+:: =>0 d -k;
+Mary :: 0;
+John :: 0;
+Alice :: 0;
+Bob :: 0;
+this :: =n 0;
+a :: =n 0;
+the :: =n 0;
+some :: =n 0;
+boy :: n;
+girl :: n;
+s :: =>1 +k t;
+:: =>2 =d 3;
+dance :: 2;
+d :: =>1 +k t;
+ing :: =>3 prog;
+n :: =>4 perf;
+:: =>3 4;
+laugh :: 2;
+smile :: 2;
+jump :: 2;
+:: =>5 =d *k 2;
+praise :: 5;
+n :: =>5 =d pass;
+like :: 5;
+kiss :: 5;
+hug :: 5;
+declare :: =c2 2;
+think :: =c2 2;
+explain :: =c2 2;
+say :: =c2 2;
+will :: =v 1;
+be :: =prog 4;
+:: =>4 v;
+be :: =pass 3;
+:: =>6 =to 3;
+seem :: 6;
+:: =>6 =c1 3;
+appear :: 6;
+:: =>v 1;
+have :: =perf v;
+it :: e -k;
+to :: =v to;
+:: =>c2 =e c1;
+that :: =t c2;
