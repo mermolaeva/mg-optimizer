@@ -1,0 +1,6 @@
+
+__pycache__/
+*.pyc
+
+plots-backup-png/*
+corpora/*

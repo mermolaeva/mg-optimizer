@@ -59,8 +59,8 @@ def mg_to_plot(mg, n, t="", fresh=set()): # grammar, path sans extension, title,
         graph.add_node(node_cat)
         graph.add_edge(pd.Edge(node_first, node_cat, label=label,  fontsize='32', color=edge_color, penwidth=edge_width))
         
-    graph.write_png('{}.png'.format(n))
-    graph.write_dot('{}.dot'.format(n))
+    graph.write_svg('{}.svg'.format(n))
+    # graph.write_dot('{}.dot'.format(n))
     
 def word_graph(mg):
     mg_adj, edge_labels = {}, {}
@@ -290,9 +290,9 @@ def get_batches(morphemes, is_high, is_suffix, batches):
             sub_mor_splits = trie_splits(syn_lis, is_suffix, splittable_mor, True)
             
             for metabatch in partition(sub_mor_splits.keys(), lambda l: tuple(sorted([x[1] for x in l]))):
-                if sum(len(batch) for batch in metabatch) > 1:
+                if sum(len(batch) for batch in metabatch) > 1: # at least 2 LIs in metabatch
                     metabatches.append((metabatch, syn_inds))
-                    if len(metabatch) > 1:
+                    if len(metabatch) > 1: # at least 2 batches in metabatch
                         metabatches.extend([([batch,], syn_inds) for batch in metabatch if len(batch) > 1])
        
     return metabatches
@@ -653,7 +653,7 @@ def feedback_history(best_hash, local_results, local_mdls, plot_path):
             plot_dir = os.path.join(os.getcwd(), r'{}'.format(plot_path))        
             if not os.path.exists(plot_dir):
                 os.makedirs(plot_dir)            
-            mg_to_plot(step_to_mg(res.mg, res.solution), "{}/{}".format(plot_dir, "_".join(plot_name)), res.note, res.fresh)
+            mg_to_plot(step_to_mg(res.mg, res.solution), "{}/{}".format(plot_dir, "-".join(plot_name)), res.note, res.fresh)
     print()
     
 def apply_fun_cycle(fun, queue, qparams, cutoff):
@@ -761,11 +761,11 @@ parser.add_argument('-cs', '--corpus_size', action='store', nargs='?', type=int,
 parser.add_argument('-gn', '--generate_new', action='store_true', default=False, help='force generate new corpus')
 parser.add_argument('-go', '--generate_only', action='store_true', default=False, help='generate new corpus and stop')
 parser.add_argument('-gm', '--generate_method', action='store', nargs='?', type=str, default="gen_rand", help='corpus generation method')
-parser.add_argument('-ct', '--check_top', action='store', nargs='?', type=int, default=50, help='number of grammars for the stop criterion')
-parser.add_argument('-bs', '--beam_size', action='store', nargs='?', type=int, default=100, help='number of candidates to keep at each level')
+parser.add_argument('-ct', '--check_top', action='store', nargs='?', type=int, default=50, help='number of grammars for the stop criterion. Default: 50')
+parser.add_argument('-bs', '--beam_size', action='store', nargs='?', type=int, default=100, help='number of candidates to keep at each level. Default: 100')
 parser.add_argument('-gc', '--grammar_cost', action='store', nargs='?', type=str, default="mdl_1d", help='grammar cost function')
 parser.add_argument('-cc', '--corpus_cost', action='store', nargs='?', type=str, default="mdl_cfg", help='corpus cost function')
-parser.add_argument('-oc', '--overall_cost', action='store', nargs='?', type=str, default="hsize_ord", help='overall cost function')
+parser.add_argument('-oc', '--overall_cost', action='store', nargs='?', type=str, default="hsize_ord", help='overall cost function. Values: hsize_ord, hsize_sum, hsize_grammar, hsize_grammar_alt')
 parser.add_argument('-noch', '--nocheck', action='store_true', default=False, help='suppress the chimera_check heuristic')
 args = parser.parse_args()
 
@@ -802,7 +802,8 @@ if __name__ == "__main__":
     
     start_time = datetime.now()
     
-    args_data = "{}_{}_{}_bs{}_{}_{}_{}_{}".format(corpus_name, args.generate_method, corpus_size, beam_size, args.grammar_cost, args.corpus_cost, args.overall_cost, "ch" if use_chimera else "noch")
+    args_data = "{}_bs{}_{}_{}".format(corpus_name, beam_size, args.overall_cost, "ch" if use_chimera else "noch")
+    # args_data = "{}-{}-{}-bs{}-{}-{}-{}-{}".format(corpus_name, args.generate_method, corpus_size, beam_size, args.grammar_cost, args.corpus_cost, args.overall_cost, "ch" if use_chimera else "noch")
     level_plot_path = "plots/{}".format(args_data)
     corpus_path = "corpora/{}_{}_{}".format(corpus_name, args.generate_method, corpus_size)
     
@@ -833,13 +834,10 @@ if __name__ == "__main__":
     orig_solved = step_to_mg(orig_mg, mor_to_str)
     print("Input cost: ({:0.2f}, {:0.2f})\n".format(*cost_function(orig_solved, mcfg)))
     mg_to_plot(orig_solved, "plots/{}_original".format(corpus_name))
-    
-    # pretty_cfg(rules_useful(mcfg), nonzero=False, used=False) # NOTE: remove this before using the learner!
-    
+        
     if not gen_only:  
         
         orig_cfg = drop_maps(mcfg) if hsize_aux != hsize_grammar else None
-        # if orig_cfg: print(cfg_check(orig_cfg, orig_eqs))
         pretty_cfg(orig_cfg, nonzero=True, used=True)
         
         best_result, best_cost = transform_mg(orig_mg, orig_eqs, mor_to_str, orig_cfg, beam_size)
@@ -848,8 +846,10 @@ if __name__ == "__main__":
         new_solved = step_to_mg(best_result.mg, best_result.solution)
         pretty_mg(new_solved, True)
         pretty_eqs(best_result.eqs)
-        mg_to_plot(new_solved, "plots/{}_({:0.2f}, {:0.2f})_final".format(args_data, best_cost[0], best_cost[1]))
+        mg_to_plot(new_solved, "plots/{}_({:0.2f}, {:0.2f})".format(args_data, best_cost[0], best_cost[1]))
         print("Output cost: {}".format(cost_function(new_solved, best_result.cfg)))        
         print("Best grammar hash: {}".format(hash_step(new_solved)))
+        
+        mg_to_file(new_solved, "{}_out".format(corpus_name), head_name)
     
     print("Elapsed time: {}\n".format(datetime.now() - start_time))

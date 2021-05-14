@@ -1,0 +1,9 @@
+PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_sum -bs 100 -vf -vh -gm gen_ord -noch & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_sum -bs 10 -vf -vh -gm gen_ord -noch & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_ord -bs 100 -vf -vh -gm gen_ord -noch & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_ord -bs 10 -vf -vh -gm gen_ord -noch & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_grammar_alt -bs 10 -vf -vh -gm gen_ord -gn & wait;
+# PYTHONHASHSEED=0 python3 optimize.py -c eng_aux -oc hsize_grammar -bs 10 -vf -vh -gm gen_ord -gn & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_long -oc hsize_grammar -bs 100 -vf -vh & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_sel -oc hsize_grammar -bs 500 -vf -vh & wait;
+PYTHONHASHSEED=0 python3 optimize.py -c eng_nat -oc hsize_grammar -bs 500 -vf -vh

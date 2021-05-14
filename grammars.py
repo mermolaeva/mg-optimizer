@@ -569,7 +569,7 @@ def make_corpus_each(mg, eqs, mor_to_str, corpus_size, gen_method, start_exp):
     return
     
 def file_to_mg(curr_name): # read grammar from a .mg file
-    file = open("grammars/{}.mg".format(curr_name), "r")
+    file = open("lexica/{}.mg".format(curr_name), "r")
     start = None
     mg, reps = {}, {}
     for line in file:
@@ -596,12 +596,12 @@ def file_to_mg(curr_name): # read grammar from a .mg file
                         mg[item_mor] = Bundle(features)
     return mg, start
     
-def mg_to_file(mg, curr_name, head_name): # write grammar into an .mg file; currently unused
+def mg_to_file(mg, curr_name, head_name): # write grammar into an .mg file
     lines = []
     for key, val in mg.items():
-        feats = " ".join(prettyformat(Feature(rsel, f.val) if f.type==usel else Feature(lic, f.val) if f.type==ulic else f) for f in val)
+        feats = " ".join(pf(f) for f in val)
         lines.append("{}{}:: {};".format(pphon(key), " " if pphon(key) else "", feats))
     result = template_mg.format(title_line.format(curr_name), head_name, "\n".join(lines))
-    f = open("grammars/{}.mg".format(curr_name), "w")
+    f = open("lexica/{}.mg".format(curr_name), "w")
     f.writelines(result)
     f.close()

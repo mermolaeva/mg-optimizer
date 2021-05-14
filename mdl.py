@@ -12,7 +12,7 @@ hsize_sum = lambda x: sum(x) # sum of corpus and grammar
 get_feature_names = lambda mg: set(f.val for b in mg.values() for f in b)
 get_feature_number = lambda mg: len(get_feature_names(mg))
 # len_types = len(types)
-len_types = 7 # ignore weak selectors, as they are not completely implemented
+len_types = 7 # right, left, and HM selectors; categories; overt and covert licensors; licensees
 get_symbol_cost = lambda mg: log2(26 + len_types + get_feature_number(mg) + 1)
 
 def count_naive(mg):
@@ -24,10 +24,17 @@ def count_naive(mg):
 def mdl_1d(mg): # same-length encoding for each symbol in Sigma, Types, and Base, plus LI delimiter
     symbol_cost = get_symbol_cost(mg)
     lexicon_cost = 0
+    sum_phon, sum_syn = 0, 0
 
-    for left, right in mg.items():
+    for left, right in mg.items(): # for each LI
+        # add 
         lexicon_cost += symbol_cost * (len(pphon(left)) + (2 * len(right)) + 1)
-
+        sum_phon += len(pphon(left))
+        sum_syn += len(right)
+    
+    # print("Symbol cost: {}".format(symbol_cost))
+    # print("Sum phon: {}".format(sum_phon))
+    # print("Sum syn: {}".format(sum_syn))
     return lexicon_cost
 
 def mdl_2d(mg):
