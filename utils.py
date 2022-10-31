@@ -15,7 +15,7 @@ def require_input():
     
 exception_ind = "An LI produced the same expression at different steps. This shouldn't be possible."
 
-def pf(obj):
+def pf(obj): # pretty format
     if isinstance(obj, Feature):
         return "{}{}{}".format(obj[0][0], obj[1], obj[0][1])
     # elif isinstance(obj, Bundle):
@@ -52,7 +52,7 @@ def pretty_columns(data):
         for row in data:
             print ("".join(word.ljust(col_widths[i]) for i, word in enumerate(row)))
 
-def pretty_mg(mg, final=False):
+def pretty_mg(mg, final=False): # pretty-print MG
     sorted_pretty = sorted(mg.items(), key=lambda x: ppretty(x[0]))
     max_show = 500
     pretty_columns([(pname(key), ppretty_final(key) if final else ppretty(key), "::", pf(val)) for key, val in sorted_pretty[:max_show]])
@@ -60,7 +60,7 @@ def pretty_mg(mg, final=False):
         print("... [{} more]".format(len(sorted_pretty)-max_show))
     print()
         
-def pretty_eqs(eqs):
+def pretty_eqs(eqs): # pretty-pring morphological equations
     for k, v in sorted(eqs.items(), key=lambda x: pphon(x[0])):
         print("{} = {}".format(" + ".join(pname(mu) for mu in v), pname(k)))
     print()

@@ -67,6 +67,7 @@ def map_movers(exp, num, ind=None, rep=False): # expression, first coordinate, i
     else: result = tuple(((num, i),) for i in mover_range if i != ind)
     return result
 
+# MCFG maps
 map_mrg_right = lambda m1, m2: (((0,0),), ((0,1),), ((0,2), (1,0), (1,1), (1,2))) + m1 + m2
 map_mrg_right_s = lambda m1, m2: (((0,0),), ((1,1), (0,1)), ((0,2), (1,0), (1,2))) + m1 + m2
 map_mrg_right_w = lambda m1, m2: (((0,0), (0,2), (1,0)), ((1,1), (0,1)), ((1,2),)) + m1 + m2

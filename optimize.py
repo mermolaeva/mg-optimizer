@@ -302,7 +302,7 @@ def note_decompose(batch_tuple):
     note = "\ndecomposition: {}".format(note_lis)
     return note
 
-def qdecompose(h, new_queue, qparams):    
+def qdecompose(h, new_queue, qparams): # lexical item decomposition
     g, eqs, ord = transform_mg.results[h].mg, transform_mg.results[h].eqs, transform_mg.results[h].order
     solution = transform_mg.results[h].solution
     
@@ -380,7 +380,7 @@ def cat_changers(lis, mor_to_phon, changers_only): # assuming no identical edges
 
     return {p:mor for p, mor in li_dict.items() if not p in stop_pairs}
     
-def qcontract_single(h, new_queue, qparams):
+def qcontract_single(h, new_queue, qparams): # contraction of a single edge
         
     g, eqs, ord = transform_mg.results[h].mg, transform_mg.results[h].eqs, transform_mg.results[h].order
     solution = transform_mg.results[h].solution
@@ -407,7 +407,7 @@ def qcontract_single(h, new_queue, qparams):
 
     return new_queue
     
-def qremove_greedy(h, new_queue, qparams):
+def qremove_greedy(h, new_queue, qparams): # deletion of all eligible edges
     g, eqs, ord = transform_mg.results[h].mg, transform_mg.results[h].eqs, transform_mg.results[h].order
     
     li_dict = cat_changers(g.items(), transform_mg.results[h].solution, False)
@@ -505,7 +505,7 @@ def cfg_add(cfg, left, right, is_term, usage_li, usage_ind, usage_num):
     cfg[left][right].usage[usage_li].num += usage_num
     return
 
-def cfg_decompose(orig_cfg, old_li, upper_li, lower_li, ind):
+def cfg_decompose(orig_cfg, old_li, upper_li, lower_li, ind): # modify CFG w.r.t. lexical item decomposition
     cfg = {}
     
     term_old, term_upper, term_lower = terminal_exp(old_li[1]), terminal_exp(upper_li[1]), terminal_exp(lower_li[1])
@@ -545,7 +545,7 @@ def cfg_decompose(orig_cfg, old_li, upper_li, lower_li, ind):
             
     return cfg
     
-def cfg_contract(orig_cfg, old_names, unify_dict):
+def cfg_contract(orig_cfg, old_names, unify_dict): # modify CFG w.r.t. edge contraction
     cfg = {start_symbol:{}}
     
     for left in orig_cfg:
@@ -570,7 +570,7 @@ def cfg_contract(orig_cfg, old_names, unify_dict):
                 
     return cfg
     
-def cfg_remove(orig_cfg, old_li, new_lis):
+def cfg_remove(orig_cfg, old_li, new_lis): # modify CFG w.r.t. edge deletion
     cfg = {}
     
     term_old = terminal_exp(old_li[1])

@@ -15,13 +15,15 @@ get_feature_number = lambda mg: len(get_feature_names(mg))
 len_types = 7 # right, left, and HM selectors; categories; overt and covert licensors; licensees
 get_symbol_cost = lambda mg: log2(26 + len_types + get_feature_number(mg) + 1)
 
+# naive grammar encoding: feature count
 def count_naive(mg):
     lexicon_cost = 0
     for left, right in mg.items():
         lexicon_cost += (len(pphon(left)) + (2 * len(right)) + 1) # total number of all features, pronounced chars, and separators
     return lexicon_cost
 
-def mdl_1d(mg): # same-length encoding for each symbol in Sigma, Types, and Base, plus LI delimiter
+# same-length encoding for each symbol in Sigma, Types, and Base, plus LI delimiter
+def mdl_1d(mg):
     symbol_cost = get_symbol_cost(mg)
     lexicon_cost = 0
     sum_phon, sum_syn = 0, 0
@@ -37,6 +39,7 @@ def mdl_1d(mg): # same-length encoding for each symbol in Sigma, Types, and Base
     # print("Sum syn: {}".format(sum_syn))
     return lexicon_cost
 
+# 2-dimensional grammar encoding: group strings by feature bundle; encourage reused bundles
 def mdl_2d(mg):
     symbol_cost = get_symbol_cost(mg)
     lexicon_cost = 0
@@ -53,6 +56,7 @@ def mdl_2d(mg):
     
     return lexicon_cost
     
+# 3-dimensional grammar encoding; group strings by types then names of features in bundles; encourage reused templates of feature bundles
 def mdl_3d(mg):
     symbol_cost = get_symbol_cost(mg)
     lexicon_cost = 0
